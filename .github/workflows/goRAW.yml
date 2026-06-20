@@ -1,0 +1,40 @@
+name: Run Raw
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        required: true
+        type: string
+      rate:
+        required: true
+        type: number
+      time:
+        required: true
+        type: number
+      threads:
+        required: true
+        type: number
+
+jobs:
+  ran:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Make raw executable
+        run: chmod +x raw
+
+      - name: Run raw with parameters
+        run: |
+          TIME=${{ inputs.time }}
+          timeout $TIME ./raw "${{ inputs.url }}" "$((TIME+60))" "${{ inputs.rate }}" "${{ inputs.threads }}"
