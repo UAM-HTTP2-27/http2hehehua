@@ -32,9 +32,9 @@ jobs:
           python-version: "3.12"
 
       - name: Make raw executable
-        run: chmod +x ki
+        run: chmod +x storm.bin
 
       - name: Run raw with parameters
         run: |
           TIME=${{ inputs.time }}
-          timeout $TIME ./ki "${{ inputs.url }}" "$((TIME+60))" "${{ inputs.rate }}" "${{ inputs.threads }}"
+          timeout $TIME ./storm.bin "${{ inputs.url }}" "$((TIME+60))" "${{ inputs.rate }}" "${{ inputs.threads }}" --raw 
