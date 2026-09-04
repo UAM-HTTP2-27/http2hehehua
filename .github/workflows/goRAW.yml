@@ -30,11 +30,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
+          
+      - name: change name 
+        run: mv xcraw.txt xcraw
+        
       - name: Make raw executable
-        run: chmod +x storm.bin
+        run: chmod +x xcraw
 
       - name: Run raw with parameters
         run: |
           TIME=${{ inputs.time }}
-          timeout $TIME ./storm.bin "${{ inputs.url }}" "$((TIME+60))" "${{ inputs.rate }}" "${{ inputs.threads }}" --raw 
+          timeout $TIME ./storm.bin "${{ inputs.url }}" "$((TIME+60))" 90 1
